@@ -1,6 +1,6 @@
 
 ## R lesson
-**Author:** xw
+**Author:** xw, Lomon So
 
 **Dependencies:** dplyr, ggplot2,
 
