@@ -1,0 +1,208 @@
+---
+title: "day2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+
+```{r}
+download.file(url="https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder_data.csv" , 
+              destfile = "gapminder_data.csv")
+
+gapminder <- read.csv("gapminder_data.csv")
+head(gapminder)
+```
+
+
+```{r}
+if (nrow(gapminder)>1000) {
+  print ("it is big!")
+}
+else {
+  print("not that big!")
+}
+```
+
+```{r}
+if ("birthrate" %in% colnames(gapminder)) {
+  print ("yes!")
+  #linear mode of birthrate vs pop
+  lm(birthrate ~pop, data = gapminder)
+} else if ("avgHEIGHT" %in% colnames(gapminder)) {
+  lm(avgHeight ~ pop, data = gapminder)
+} else {
+  print("not included!")
+  lm(lifeExp ~ pop, data = gapminder)
+}
+```
+
+```{r}
+for (y in c(10,25,50)) {
+  current_result <- mean(gapminder[1:y, "lifeExp"])
+  result <- c(result,current_result)
+  if  (y < 2012) {
+  print (y)
+  
+}
+  
+}
+```
+
+
+```{r}
+for (y in gapminder$yeary) {
+  if  (y < 2012) {
+  print (y)
+  
+}
+  
+}
+```
+
+
+```{r}
+new_result <- list()
+for (i in 1:3){
+  for (j in c("a", "b", "c", "d")){
+  current_name <- paste(i,j)
+  new_result[current_name] <- rnorm(1)
+ }
+}
+```
+
+
+# loop through gapminder dat, by continent, print whether lifeExp MORE OR LESS THAN 50
+```{r}
+ for (c in unique(gapminder$continent)){
+   data_subset <- gapminder[gapminder$continent == c, "lifeExp"]
+    mean_life_exp <- mean(data_subset)
+    if ((mean_life_exp) < 50) {
+      adjective <- "less than"
+    
+   } else if ((mean_life_exp) > 50){
+   
+     adjective <- "more than"
+   } else {
+     adjective <- "equal to"
+   }
+    print (paste ("mean life expectancy in", c, "is",adjective, "50."))
+ }
+```
+
+
+
+# writing our own function
+```{r}
+fahr_to_kelvin <- function(fahr_temperature){
+  #main content of the function here
+  kevin_temperature <- (fahr_temperature -32)*5/9 + 273.15
+  return (kevin_temperature)
+}
+kelvin_to_celsius <- function(kevin_temperature){
+  #main content of the function here
+  celsius_temperature <- kevin_temperature - 273.15
+  return (celsius_temperature)
+}
+fahr_to_celsius <-
+  kelvin_to_celsius(fahr_to_kelvin(32))
+
+fahr_to_kelvin(1:10)
+fahr_to_kelvin(c(20,30,40))
+
+```
+
+
+
+
+```{r}
+calc_gdp <- function(dataframe) {
+  gdp <- dataframe$pop*dataframe$gdpPercap
+  return(gdp)
+}
+
+all_the_gdps <- calc_gdp(gapminder)
+cbind(gapminder, all_the_gdps)
+library(dplyr)
+
+#pipe inserts its left-side argument as the firt arg. of the function on its right
+gapminder %>% calc_gdp() 
+
+gapminder %>% 
+  mutate(GDP = gdpPercap*pop) -> 
+  gapminder_plus
+
+
+gapminder_plus %>%
+  group_by(continent) %>%
+  summarise(meanGDP = mean(GDP))
+
+
+gapminder_plus %>%
+  select (country, lifeExp) %>%
+  head()
+ 
+gapminder_plus %>%
+  filter (year == 2002, continent == "Europe", lifeExp>80) %>%
+  head()
+
+gapminder_plus %>%
+  group_by(continent) %>%
+  count()
+
+gapminder_plus %>%
+  group_by(continent) %>%
+  sample_n(200, replace=TRUE) %>%
+  count() ->
+  count_of_samples_per_group
+
+#add colume to gapminder_plus where it contains the average GDP for that continent in that year
+
+gapminder_plus %>% 
+  group_by(continent, year) %>%
+  mutate(meanGDPofContinentThisYear = mean(GDP)) ->
+  gapminder_plus
+  
+
+gapminder_plus %>%
+  select(-continent,-lifeExp,-gdpPercap)
+
+
+```
+
+
+### dplyr piplines with ggplot
+```{r}
+gapminder_plus %>%
+  filter(gdpPercap < 0.5*mean(gdpPercap)) %>%
+  ggplot(mapping = aes(x=year, y=lifeExp, by = country, color = continent))+
+  geom_line()
+```
+
+
+```{r}
+```
+
+```{r}
+```
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

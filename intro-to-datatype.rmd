@@ -1,0 +1,87 @@
+---
+title: "my3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+1+2+4
+```
+```{r}
+experiment1 <- read.csv(file="data/experiment.csv")
+```
+
+```{r}
+experiment1$protein_names
+experiment1$intensity + 1.
+paste("Protein name:", experiment1$protein_names)
+
+```
+```{r}
+experiment2 <- experiment1
+experiment2$protein_names <- paste("Protein Name:", experiment2$protein_names)
+```
+
+```{r}
+experiment1$protein_names + experiment1$intensity
+
+```
+```{r}
+c(1,2,'f')
+```
+```{r}
+list(1, 2, 'f', TRUE)
+List_example <- list(title="Numbers", numbers=c(1,2,4),data_exsit=TRUE)
+```
+```{r}
+fruits <- c("apple","pear","orange")
+factor_f <- factor(fruits)
+```
+
+```{r}
+mydata <- c("case","control","case","control")
+factor_mydata <- factor(mydata, levels= c("control","case"))
+```
+
+```{r}
+replicate <- c(1,2,1)
+experiment <- cbind(experiment, replicate)
+```
+
+```{r}
+levels(experiment$protein_names) <- c(levels(experiment$protein_names),"FOXO3")
+new_protein <- list(protein_names = "Foxo3",
+                    intensity = 1.5,
+                    in_membrane =0,
+                    replicate = 2
+                    )
+rbind(experiment,new_protein)
+```
+
+```{r}
+experiment[,-2]
+```
+
+```{r}
+another_colume <- c(1,2,3)
+cbind(experiment, another_colume)
+
+```
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
