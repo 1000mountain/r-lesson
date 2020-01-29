@@ -1,4 +1,3 @@
-
 ## R lesson
 **Author:** xw, Lomon So
 
@@ -8,4 +7,4 @@
 This repository contains analysis of life expectancy vs GDP.
 
 Lomon is very very interested in population growth.
-
+Xiaomin is intersted in population growth.
